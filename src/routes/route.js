@@ -7,6 +7,9 @@ router.post("/functionup/colleges", collegeController.createColleges);
 
 router.post("/functionup/interns", internController.createInterns);
 
+// router.get("/functionup/collegeDetails", collegeController.getAllDetails);
+
+
 router.all("/**", function (req, res) {
     res.status(404).send({
         status: false,
