@@ -1,11 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const collegeController = require('../controller/collegeController')
+const collegeController = require("../controller/collegeController");
+const internController = require("../Controller/internController");
 
-router.get("/test-me", function (req, res) {
-    res.send("My first ever api!") 
+router.post("/functionup/colleges", collegeController.createColleges);
+
+router.post("/functionup/interns", internController.createInterns);
+
+router.all("/**", function (req, res) {
+    res.status(404).send({
+        status: false,
+        msg: "The api you request is not available"
+    })
 })
 
-router.post("/functionup/colleges", collegeController.createCollege)
 
 module.exports = router;
