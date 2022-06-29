@@ -6,19 +6,19 @@ const validator = require("../validator/validator");
 const createInterns = async function (req, res) {
     try {
         const requestBody = req.body;
-        if (!isValidRequestBody(requestBody)) {
+        if (!validator.isValidRequestBody(requestBody)) {
             return res.status(400).send({
                 status: false,
                 msg: "Invalid request parameters. Please provide Intern Details",
             });
         }
 
-        const { name, mobile, email, collegeId, isDeleted } = requestBody;
+        const { name, mobile, email, collegeId,collegeName, isDeleted } = requestBody;
         if (!validator.isValid(name)) {
             res.status(400).send({ status: false, msg: "College name is required" });
             return;
         }
-        if (!isValid(mobile)) {
+        if (!validator.isValid(mobile)) {
             res.status(400).send({ status: false, msg: "Mobile Number is required" });
             return;
         }
@@ -41,7 +41,7 @@ const createInterns = async function (req, res) {
                 });
             return;
         }
-        if (!isValid(email)) {
+        if (!validator.isValid(email)) {
             return res
               .status(400)
               .send({ status: false, message: "Intern email required" });
@@ -67,6 +67,17 @@ const createInterns = async function (req, res) {
             return;
           }
 
+          let intern = {
+            name,
+            mobile,
+            email,
+            collegeId,
+            collegeName,
+            isDeleted: isDeleted ? isDeleted : false,
+            deleteAt: isDeleted ? new Date() : null
+        }
+        let internCreated = await internModel.create(intern)
+                res.status(201).send({ status: true, data: internCreated })
     }
     catch (error) {
         res.status(500).send({ status: false, message: error.message });

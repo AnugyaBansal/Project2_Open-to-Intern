@@ -19,13 +19,31 @@ const createColleges = async function (req, res) {
     if (!validator.isValid(name)) {
       res.status(400).send({ status: false, msg: "College name is required" });
       return;
+    }else if (/\d/.test(name)) {
+      res.status(400).send({ status: false, msg: "name cannot have numbers.   " });
     }
+    
+    let collegeisRegistered= await collegeModel.findOne({name});
+    if (collegeisRegistered) {
+      res
+        
+        .send({
+          status: false,
+          message: `College is Already Registered.`,
+        });
+      return;
+    }
+
     if (!validator.isValid(fullName)) {
       res
         .status(400)
         .send({ status: false, msg: "College Fullname is required" });
       return;
+    }else if (/\d/.test(fullName)) {
+      res.status(400).send({ status: false, msg: "fullname cannot have numbers.   " });
     }
+
+
     if (!validator.isValid(logoLink)) {
       res
         .status(400)
