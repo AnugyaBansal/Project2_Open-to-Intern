@@ -6,19 +6,19 @@ const validator = require("../validator/validator");
 const createInterns = async function (req, res) {
     try {
         const requestBody = req.body;
-        if (!isValidRequestBody(requestBody)) {
+        if (!validator.isValidRequestBody(requestBody)) {
             return res.status(400).send({
                 status: false,
                 msg: "Invalid request parameters. Please provide Intern Details",
             });
         }
 
-        const { name, mobile, email, collegeId, isDeleted } = requestBody;
+        const { name, mobile, email, collegeName, isDeleted } = requestBody;
         if (!validator.isValid(name)) {
             res.status(400).send({ status: false, msg: "College name is required" });
             return;
         }
-        if (!isValid(mobile)) {
+        if (!validator.isValid(mobile)) {
             res.status(400).send({ status: false, msg: "Mobile Number is required" });
             return;
         }
@@ -41,7 +41,7 @@ const createInterns = async function (req, res) {
                 });
             return;
         }
-        if (!isValid(email)) {
+        if (!validator.isValid(email)) {
             return res
               .status(400)
               .send({ status: false, message: "Intern email required" });
@@ -66,11 +66,29 @@ const createInterns = async function (req, res) {
               });
             return;
           }
+          if(!validator.isValid(collegeName)){
+            return res.status(400).send({status:false, message: " College Name is require"});
+        }
 
+        let iscollegeId = await collegeModel.findOne({name:requestBody.collegeName}).select({_id:1});
+          if(!iscollegeId){
+            return res.status(400).send({status: false, msg: "college name is not exist" });
+          }
+          let id=iscollegeId._id.toString()
+          requestBody.collegeId=id
+          delete requestBody.collegeName
+          if (isDeleted == true) {
+            res
+              .status(400)
+              .send({ status: false, msg: "Cannot input isDeleted as true while registering" });
+            return;
+          }
+          const newIntern = await internModel.create(requestBody);
+           res.status(201).send({status:true, msg : "New Intern Created successfully ", data: newIntern,});
     }
     catch (error) {
         res.status(500).send({ status: false, message: error.message });
     }
-}
+};
 
 module.exports.createInterns = createInterns;
