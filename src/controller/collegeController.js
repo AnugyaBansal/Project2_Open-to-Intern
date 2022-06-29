@@ -3,7 +3,7 @@ const collegeModel = require("../models/collegeModel");
 const internModel = require("../models/internModel");
 const validator = require("../validator/validator")
 
-  // =================== createCollege =========================
+// =================== createCollege =========================
 
 const createColleges = async function (req, res) {
   try {
@@ -26,7 +26,7 @@ const createColleges = async function (req, res) {
     if (isNameAlreadyUsed) {
       res.status(400).send({ status: false, message: `College name is already registered`, });
       return;
-    } 
+    }
     if (!validator.isValid(fullName)) {
       res.status(400).send({ status: false, msg: "College Fullname is required" });
       return;
@@ -58,40 +58,55 @@ const createColleges = async function (req, res) {
     res.status(500).send({ status: false, message: error.message });
   }
 };
-  // ========================================= getCollegeDetails ==============================================
-const getAllIntern = async function (req, res) {
-  // res.setHeader("Access-Control-Allow-Origin", "*");
+// ========================================= getCollegeDetails ==============================================
+const getcollegeDetails = async function (req, res) {
+
   try {
-    let collegeName = req.query.collegeName;
 
-    // request query params  validation
-
+    const collegeName = req.query.name
     if (!collegeName) {
-      return res.status(404).send({ status: false, msg: "give inputs" });
+      return res.status(404).send({ status: false, msg: "valid query is mandatory" })
     }
-
-    // college validation
-
-    let collegeDetail = await collegeModel.findOne({
-      name: collegeName,
-      isDeleted: false,
+    const college = await collegeModel.findOne({ name: collegeName });
+    if (!college) {
+      return res.status(404).send({ status: false, msg: "no such college present" })
+    }
+    const interData = await internModel.find({ collegeId: college._id });
+    // if (!interData.length == 0) {
+    //   return res.status(404).send({ status: false, msg: "no such intern" })
+    // }
+    const interns = interData.map(intern => {
+      
+      return {
+        _id: intern._id,
+        name: intern.name,
+        email: intern.email,
+        mobile: intern.mobile
+      }
+      
+     });
+    //  if (interns.length == 0) {
+    //   return res.status(404).send({ status: false, msg: "no such inter" })
+    // }
+    
+    const data = {
+      collegename: college.name,
+      fullName: college.fullName,
+      logoLink: college.logoLink,
+      interns: interns
+    };
+    
+    res.status(200).send({
+      status: true,
+      data: data,
     });
-    if (!collegeDetail) {
-      res.status(404).send({status: false, msg: "college not found please provide valid college name",});
-    }
-     // that is one method fo response structure data in data base
-     let collegeDetail1 = await collegeModel.findOne({ name: collegeName, isDeleted: false }).select({ name: 1, fullName: 1, logoLink: 1, _id: 1 });
-    let internDetail = await internModel.find({ collegeId: collegeDetail._id, isDeleted: false }).select({ _id: 1, name: 1, email: 1, mobile: 1 });
-    if (internDetail.length === 0) {
-      return res.status(201).send({status: true, msg: {...collegeDetail1.toObject(),interns: "intern Details not present"}});
-    }
-    let result = { ...collegeDetail1.toObject(), interns: internDetail };
-    res.status(200).send({ status: true, data: result });
+
   } catch (error) {
-    res.status(500).send({ status: false, msg: error.message });
+    res.status(500).send({ status: false, message: error.message });
+
   }
 };
-
 module.exports.createColleges = createColleges;
-module.exports.getAllIntern = getAllIntern;
+module.exports.getcollegeDetails = getcollegeDetails;
+
 
