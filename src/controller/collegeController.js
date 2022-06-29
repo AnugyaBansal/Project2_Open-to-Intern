@@ -1,6 +1,6 @@
-const mongoose = require("mongoose")
+
 const collegeModel = require("../models/collegeModel");
-const internModel = require("../models/internModel");
+// const internModel = require("../models/internModel");
 const validator = require("../validator/validator")
 
 const createColleges = async function (req, res) {
@@ -16,33 +16,37 @@ const createColleges = async function (req, res) {
       return
     }
     const { name, fullName, logoLink, isDeleted } = requestBody;
-    if (!validator.isValid(name)) {
-      res.status(400).send({ status: false, msg: "College name is required" });
+    if (!validator.isValid(name)||/\d/.test(name)) {
+      res.status(400).send({ status: false, msg: "College name is required OR name cannot have numbers" });
       return;
     }else if (/\d/.test(name)) {
       res.status(400).send({ status: false, msg: "name cannot have numbers.   " });
     }
+    //  if (/\d/.test(name)) {
+    //   res.status(400).send({ status: false, msg: "name cannot have numbers.   " });
+    // }
     
-    let collegeisRegistered= await collegeModel.findOne({name});
-    if (collegeisRegistered) {
-      res
-        
-        .send({
-          status: false,
-          message: `College is Already Registered.`,
-        });
-      return;
-    }
-
-    if (!validator.isValid(fullName)) {
+    let isNameAlreadyUsed = await collegeModel.findOne({ name });
+    if (isNameAlreadyUsed) {
       res
         .status(400)
-        .send({ status: false, msg: "College Fullname is required" });
+        .send({
+          status: false,
+          message: `College name is already registered`,
+        });
       return;
     }else if (/\d/.test(fullName)) {
       res.status(400).send({ status: false, msg: "fullname cannot have numbers.   " });
     }
-
+    if (!validator.isValid(fullName)||/\d/.test(fullName)) {
+      res
+        .status(400)
+        .send({ status: false, msg: "College Fullname is required OR fullname cannot have numbers" });
+      return;
+    }
+    // else if (/\d/.test(fullName)) {
+    //   res.status(400).send({ status: false, msg: "fullname cannot have numbers.   " });
+    // }
 
     if (!validator.isValid(logoLink)) {
       res
