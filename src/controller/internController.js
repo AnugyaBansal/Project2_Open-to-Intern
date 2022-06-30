@@ -9,15 +9,15 @@ const createInterns = async function (req, res) {
   try {
     const requestBody = req.body;
     if (!validator.isValidRequestBody(requestBody)) {
-      return res.status(400).send({ status: false, msg: "Invalid request parameters. Please provide Intern Details" });
+      return res.status(400).send({ status: false, message: "Invalid request parameters. Please provide Intern Details" });
     }
     const { name, mobile, email, collegeName, isDeleted } = requestBody;
     if (!validator.isValid(name)) {
-      res.status(400).send({ status: false, msg: "College name is required" });
+      res.status(400).send({ status: false, message: "College name is required" });
       return;
     }
     if (!validator.isValid(mobile)) {
-      res.status(400).send({ status: false, msg: "Mobile Number is required" });
+      res.status(400).send({ status: false, message: "Mobile Number is required" });
       return;
     }
     if (!/^[0-9]\d{9}$/gi.test(mobile)) {
@@ -48,16 +48,16 @@ const createInterns = async function (req, res) {
 
     let iscollegeId = await collegeModel.findOne({ name: requestBody.collegeName }).select({ _id: 1 });
     if (!iscollegeId) {
-      return res.status(400).send({ status: false, msg: "college name is not exist" });
+      return res.status(400).send({ status: false, message: "college name is not exist" });
     }
     let id = iscollegeId._id.toString()
     requestBody.collegeId = id
     if (isDeleted == true) {
-      res.status(400).send({ status: false, msg: "Cannot input isDeleted as true while registering" });
+      res.status(400).send({ status: false, message: "Cannot input isDeleted as true while registering" });
       return;
     }
     const newIntern = await internModel.create(requestBody);
-    res.status(201).send({ status: true, msg: "New Intern Created successfully ", data: newIntern, });
+    res.status(201).send({ status: true, message: "New Intern Created successfully ", data: newIntern, });
   }
   catch (error) {
     res.status(500).send({ status: false, message: error.message });

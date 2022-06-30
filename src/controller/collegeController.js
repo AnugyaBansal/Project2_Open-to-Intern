@@ -1,7 +1,7 @@
 
 const collegeModel = require("../models/collegeModel");
 const internModel = require("../models/internModel");
-const validator = require("../validator/validator")
+const validator = require("../validator/validator");
 
 // =================== createCollege =========================
 
@@ -9,16 +9,16 @@ const createColleges = async function (req, res) {
   try {
     const requestBody = req.body;
     if (!validator.isValidRequestBody(requestBody)) {
-      res.status(400).send({ status: false, msg: "Invalid request parameters. Please provide College Details", });
+      res.status(400).send({ status: false, message: "Invalid request parameters. Please provide College Details", });
       return
     }
     const { name, fullName, logoLink, isDeleted } = requestBody;
     if (!validator.isValid(name)) {
-      res.status(400).send({ status: false, msg: "College name is required" });
+      res.status(400).send({ status: false, message: "College name is required" });
       return;
     }
     else if (/\d/.test(name)) {
-      res.status(400).send({ status: false, msg: "name cannot have numbers.   " });
+      res.status(400).send({ status: false, message: "name cannot have numbers.   " });
       return;
     }
 
@@ -28,15 +28,15 @@ const createColleges = async function (req, res) {
       return;
     }
     if (!validator.isValid(fullName)) {
-      res.status(400).send({ status: false, msg: "College Fullname is required" });
+      res.status(400).send({ status: false, message: "College Fullname is required" });
       return;
     }
     else if (/\d/.test(fullName)) {
-      res.status(400).send({ status: false, msg: "Fullname cannot have numbers.   " });
+      res.status(400).send({ status: false, message: "Fullname cannot have numbers.   " });
       return;
     }
     if (!validator.isValid(logoLink)) {
-      res.status(400).send({ status: false, msg: "College Logo link is required" });
+      res.status(400).send({ status: false, message: "College Logo link is required" });
       return;
     }
     if (!(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(logoLink))) {
@@ -44,7 +44,7 @@ const createColleges = async function (req, res) {
       return;
     }
     if (isDeleted == true) {
-      res.status(400).send({ status: false, msg: "Cannot input isDeleted as true while registering" });
+      res.status(400).send({ status: false, message: "Cannot input isDeleted as true while registering" });
       return;
     }
     let isfullNameAlreadyUsed = await collegeModel.findOne({ fullName });
@@ -53,7 +53,7 @@ const createColleges = async function (req, res) {
       return;
     }
     const newCollege = await collegeModel.create(requestBody);
-    res.status(201).send({ status: true, msg: "New College created successfully", data: newCollege, });
+    res.status(201).send({ status: true, message: "New College created successfully", data: newCollege, });
   } catch (error) {
     res.status(500).send({ status: false, message: error.message });
   }
@@ -65,11 +65,11 @@ const getcollegeDetails = async function (req, res) {
 
     const collegeName = req.query.name
     if (!collegeName) {
-      return res.status(404).send({ status: false, msg: "valid query is mandatory" })
+      return res.status(404).send({ status: false, message: "valid query is mandatory" })
     }
     const college = await collegeModel.findOne({ name: collegeName });
     if (!college) {
-      return res.status(404).send({ status: false, msg: "no such college present" })
+      return res.status(404).send({ status: false, message: "no such college present" })
     }
     const interData = await internModel.find({ collegeId: college._id });
     // if (!interData.length == 0) {
