@@ -88,7 +88,7 @@ const getcollegeDetails = async function (req, res) {
     
     
     const data = {
-      collegename: college.name,
+      name: college.name,
       fullName: college.fullName,
       logoLink: college.logoLink,
       interns: interns.length==0 ? "No such Intern" : interns
