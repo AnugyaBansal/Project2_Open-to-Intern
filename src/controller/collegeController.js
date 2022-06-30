@@ -3,11 +3,12 @@ const collegeModel = require("../models/collegeModel");
 const internModel = require("../models/internModel");
 const validator = require("../validator/validator");
 
-// =================== createCollege =========================
+
 
 const createColleges = async function (req, res) {
   try {
     const requestBody = req.body;
+    //this api create college
     if (!validator.isValidRequestBody(requestBody)) {
       res.status(400).send({ status: false, message: "Invalid request parameters. Please provide College Details", });
       return
