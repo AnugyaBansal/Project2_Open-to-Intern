@@ -52,7 +52,6 @@ const createInterns = async function (req, res) {
     }
     let id = iscollegeId._id.toString()
     requestBody.collegeId = id
-    delete requestBody.collegeName
     if (isDeleted == true) {
       res.status(400).send({ status: false, msg: "Cannot input isDeleted as true while registering" });
       return;

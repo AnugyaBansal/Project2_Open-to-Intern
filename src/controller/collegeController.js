@@ -24,7 +24,7 @@ const createColleges = async function (req, res) {
 
     let isNameAlreadyUsed = await collegeModel.findOne({ name });
     if (isNameAlreadyUsed) {
-      res.status(400).send({ status: false, message: `College name is already registered`, });
+      res.status(400).send({ status: false, message: `${name} College name is already registered`, });
       return;
     }
     if (!validator.isValid(fullName)) {
@@ -49,7 +49,7 @@ const createColleges = async function (req, res) {
     }
     let isfullNameAlreadyUsed = await collegeModel.findOne({ fullName });
     if (isfullNameAlreadyUsed) {
-      res.status(400).send({ status: false, message: `College full name is already registered`, });
+      res.status(400).send({ status: false, message: `${fullName} College full name is already registered`, });
       return;
     }
     const newCollege = await collegeModel.create(requestBody);
@@ -85,15 +85,13 @@ const getcollegeDetails = async function (req, res) {
       }
       
      });
-    //  if (interns.length == 0) {
-    //   return res.status(404).send({ status: false, msg: "no such inter" })
-    // }
+    
     
     const data = {
       collegename: college.name,
       fullName: college.fullName,
       logoLink: college.logoLink,
-      interns: interns
+      interns: interns.length==0 ? "No such Intern" : interns
     };
     
     res.status(200).send({

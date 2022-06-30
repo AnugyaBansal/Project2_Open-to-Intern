@@ -1,4 +1,5 @@
-# project2-intern
+Radon
+# Project-2_Intern
 Open to Intern Project Requirement
 Key points
 Create a group database groupXDatabase. You can clean the db you previously used and resue that.
@@ -9,8 +10,6 @@ College Model
 { name: { mandatory, unique, example iith}, fullName: {mandatory, example `Indian Institute of Technology, Hyderabad`}, logoLink: {mandatory}, isDeleted: {boolean, default: false} }
 Intern Model
 { name: {mandatory}, email: {mandatory, valid email, unique}, mobile: {mandatory, valid mobile number, unique}, collegeId: {ObjectId, ref to college model, isDeleted: {boolean, default: false}}
-
-
 POST /functionup/colleges
 Create a college - a document for each member of the group
 
@@ -31,8 +30,6 @@ GET /functionup/collegeDetails
 Returns the college details for the requested college (Expect a query parameter by the name collegeName. This is anabbreviated college name. For example iith)
 Returns the list of all interns who have applied for internship at this college.
 The response structure should look like this
-
-
 Testing
 To test these apis create a new collection in Postman named Project 2 Internship
 Each api should have a new request in this collection
@@ -78,7 +75,7 @@ College details
     "name": "xyz",
     "fullName": "Some Institute of Engineering and Technology",
     "logoLink": "some public s3 link for a college logo",
-    "interests": [
+    "interns": [
       {
         "_id": "123a47301a53ecaeea02be59",
         "name": "Jane Doe",
