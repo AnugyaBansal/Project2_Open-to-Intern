@@ -64,7 +64,7 @@ const getcollegeDetails = async function (req, res) {
 
   try {
 
-    const collegeName = req.query.name
+    const collegeName = req.query.collegeName
     if (!collegeName) {
       return res.status(404).send({ status: false, message: "valid query is mandatory" })
     }
