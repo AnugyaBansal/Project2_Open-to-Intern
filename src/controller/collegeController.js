@@ -70,7 +70,7 @@ const getcollegeDetails = async function (req, res) {
     }
     const college = await collegeModel.findOne({ name: collegeName });
     if (!college) {
-      return res.status(404).send({ status: false, message: "no such college present" })
+      return res.status(400).send({ status: false, message: "no such college present" })
     }
     const interData = await internModel.find({ collegeId: college._id });
     // if (!interData.length == 0) {
