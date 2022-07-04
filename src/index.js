@@ -1,14 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const route = require('./routes/route.js');
+const multer = require('multer')
 const { default: mongoose } = require('mongoose');
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(multer().any())
 
-
-mongoose.connect("mongodb+srv://Anugya12:p3HxzFzZPTlX6MuP@cluster0.ulb3u.mongodb.net/group11Database?retryWrites=true&w=majority", {
+mongoose.connect("mongodb+srv://chetan1211:WgU6Zh5QkZbswgvv@cluster0.u6xmsip.mongodb.net/group11Database?retryWrites=true&w=majority", {
     useNewUrlParser: true
 })
 .then( () => console.log("MongoDb is connected"))
@@ -17,6 +18,6 @@ mongoose.connect("mongodb+srv://Anugya12:p3HxzFzZPTlX6MuP@cluster0.ulb3u.mongodb
 app.use('/', route);
 
 
-app.listen(process.env.PORT || 3000, function () {
-    console.log('Express app running on port ' + (process.env.PORT || 3000))
+app.listen(process.env.PORT || 3001, function () {
+    console.log('Express app running on port ' + (process.env.PORT || 3001))
 });

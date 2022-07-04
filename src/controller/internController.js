@@ -6,6 +6,7 @@ const validator = require("../validator/validator");
 // =================== createIntern =========================
 
 const createInterns = async function (req, res) {
+  res.setHeader("Access-Control-Allow-Origin",'*')
   try {
     const requestBody = req.body;
     if (!validator.isValidRequestBody(requestBody)) {
@@ -13,7 +14,7 @@ const createInterns = async function (req, res) {
     }
     const { name, mobile, email, collegeName, isDeleted } = requestBody;
     if (!validator.isValid(name)) {
-      res.status(400).send({ status: false, message: "College name is required" });
+      res.status(400).send({ status: false, message: " Name is required" });
       return;
     }
     if (!validator.isValid(mobile)) {
