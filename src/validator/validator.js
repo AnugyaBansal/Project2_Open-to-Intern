@@ -10,7 +10,7 @@ const isValid = function (value) {
   };
   
   const isValidRequestBody = function (requestbody) {
-    return Object.keys(requestbody).length > 0;
+    return Object.keys(requestbody).length = 0;
   };
 
   const isValidObjectId = function (objectId) {
